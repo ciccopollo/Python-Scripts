@@ -1,0 +1,13 @@
+from numpy import *
+import numpy as np
+from astropy.io import ascii
+
+# Columns to be considered (ra, dec, name)
+
+file1=ascii.read('z=2.85')
+
+az, ajy, ejy, ak, arl, afl, aflw, aqbol=file1['Redshift'], file1['VLA_Jy'], file1['eVLA_Jy'], file1['VLA_K'], file1['Radio_Luminosity'],file1['FIR_Luminosity(Solar)'] ,file1['FIR_Luminosity(Watts)'], file1['qbol']
+naz, najy, nejy, nak, narl, nafl, naflw, naqbol= np.array(az), np.array(ajy), np.array(ejy), np.array(ak), np.array(arl), np.array(afl), np.array(aflw), np.array(aqbol)
+median=np.median(naz)
+majy, mejy, mak, marl, mafl, maflw, maqbol= np.mean(najy), np.mean(nejy), np.mean(nak), np.mean(narl), np.mean(nafl), np.mean(naflw), np.mean(naqbol)
+print("{0} {1} {2} {3} {4} {5} {6} {7}". format(median, majy, mejy, mak, marl, mafl, maflw, maqbol))
