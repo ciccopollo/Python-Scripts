@@ -1,0 +1,32 @@
+from numpy import *
+import numpy as np
+from astropy.io import ascii
+from scipy.integrate import quad
+from math import *
+
+file1=ascii.read('distance_file')
+print(file1)
+ared, aname=file1['z'], file1['id']
+red, name=np.array(ared), np.array(aname)
+
+def integrand(x, m, v):
+  return 1/sqrt(m*pow(1+x,3)+v)
+
+m=0.286
+v=0.714
+
+K=299792458/(69.6*pow(10,3))
+
+count=0
+results=open('results.txt', 'w')
+results.write("# name redshift distance(Mpc) distance(m)\n\n")
+
+while (count<115):
+  I=quad(integrand, 0, red[count], args=(m,v))[0]
+  distancepc=I*K*(1+red[count])
+  distancem=distancepc*3.0856778*pow(10,22)
+  print(red[count], distancepc, distancem)
+  result="{0} {1} {2} {3}".format(name[count], red[count], distancepc, distancem)
+  results.write(result+'\n')
+  count=count+1
+results.close()
