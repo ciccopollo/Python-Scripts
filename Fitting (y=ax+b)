@@ -1,0 +1,61 @@
+import numpy as np
+from numpy import *
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+import pylab 
+from astropy.io import ascii
+
+# better-looking plots
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['figure.figsize'] = (10.0, 8.0)
+plt.rcParams['font.size'] = 18
+plt.xlabel('z')
+plt.ylabel('q bol')
+plt.axis((0,3,0,3))
+plt.tight_layout()
+
+qfile=ascii.read('outliers')
+
+aredshift = qfile['z']
+aq = qfile['qbol']
+adq = qfile['dq']
+
+redshift = np.array(aredshift)
+q = np.array(aq)
+dq = np.array(adq)
+
+plt.errorbar(redshift, q, dq, fmt='ok')
+
+def fitting(x, a, b):
+  return a*x+b
+
+def fittingerrors(x, c, d):
+  return c*x+d
+
+#NO ERRORS: TO FIT, X, Y
+popt, pcov=curve_fit(fitting, redshift, q)
+
+#COVARIANCE = SQUARE OF ERROR
+
+print "NO ERRORS"
+print "a= ", popt[0], "+/-", pcov[0][0]**0.5
+print "b= ", popt[1], "+/-", pcov[1][1]**0.5
+
+#ERRORS: TO FIT, X, Y, ERROR
+epopt, epcov=curve_fit(fittingerrors, redshift, q, sigma=dq)
+#print(epcov)
+
+print "WITH ERRORS"
+print "a= ", epopt[0], "+/-", epcov[0][0]**0.5
+print "b= ", epopt[1], "+/-", epcov[1][1]**0.5
+
+#redshift range (REDSHIFT=X, Q=Y)
+redshiftf=np.arange(redshift.min(), redshift.max(), 0.1)
+
+#PLOTS THE LINE
+qf=fitting(redshiftf, popt[0], popt[1])
+eqf=fittingerrors(redshiftf, epopt[0], epopt[1])
+plt.plot(redshiftf,qf, 'r')
+plt.plot(redshiftf,eqf)
+pylab.show()
+
