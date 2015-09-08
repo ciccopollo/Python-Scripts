@@ -1,0 +1,45 @@
+import numpy as np
+from numpy import *
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+import pylab 
+from astropy.io import ascii
+
+# better-looking plots
+plt.rcParams['font.family'] = 'serif'
+plt.rcParams['figure.figsize'] = (10.0, 8.0)
+plt.rcParams['font.size'] = 18
+plt.xlabel('z')
+plt.ylabel('q bol')
+#plt.axis((0,3,0,3))
+plt.tight_layout()
+
+qfile=ascii.read('cosmos_zqbol')
+
+aredshift = qfile['z']
+aq = qfile['qbol']
+
+redshift = np.array(aredshift)
+q = np.array(aq)
+
+print(q)
+
+median=median(q)
+print(median)
+std=np.std(q)
+print(std)
+sigma=std*3
+print(sigma)
+lowerlimit=median-sigma
+ivison=2.40-sigma
+print('mine', lowerlimit, 'Ivison', ivison)
+
+plt.scatter(redshift, q, c='r', label='COSMOS')
+plt.axhline(y=ivison, color='b', label=round(float(ivison),3))
+plt.axhline(y=2.40, color='y', label='Ivison')
+plt.axhline(y=lowerlimit, color='k', label=round(float(lowerlimit),3))
+plt.axhline(y=median, color='g', label='mine')
+plt.legend(loc='lower left', prop={'size':15})
+pylab.show()
+
+
