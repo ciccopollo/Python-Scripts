@@ -1,0 +1,33 @@
+from numpy import *
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
+from astropy.io import ascii
+
+file1=ascii.read('450filter')
+colone=raw_input('col1\n')
+coltwo=raw_input('col2\n')
+
+#Create numpy arrays
+
+awave, ares=file1[colone], file1[coltwo]
+x, y=np.array(awave), np.array(ares)
+
+#rows of arrays, pick the longest one
+
+inter=interp1d(x,y, kind='linear')
+count=400
+arraymax=550
+
+#Ascii Header
+results=open('results.txt', 'w')
+results.write("# wave flux \n\n") 
+
+while (count < arraymax):
+    interpolated=inter(count)
+    result="{0} {1}".format(count, inter(count))
+    results.write(result+'\n')
+    count=count+0.01
+    
+results.close()
+
