@@ -49,12 +49,28 @@ rows=originalwave.shape[0]
  
 #Lowest filter value
 lowest=originalwave[0]
+#Difference Mid Filter/Lowest Filter Value
+diff=round(float(centre-lowest,2))
  
 #Array containing SED*TRANSMISSION results
  
 RESULT=np.zeros((rows,4))
  
 #LOOP TO CHANGE REDSHIFT/WAVELENGTH
+
+for i in range(redshiftbins):
+ 
+  #Wavelength
+  zwave=centre/(1+bins[i])
+  zlow=zwave-diff
+  #Depending on zlow sign
+  if zlow >= SED[0][0]:
+   for g in range(sedrows):
+    if SED[g][0]=zlow:
+     
+     
+    
+   
 
 
   
