@@ -54,7 +54,7 @@ diff=round(float(centre-lowest,2))
  
 #Array containing SED*TRANSMISSION results
  
-RESULT=np.zeros((rows,4))
+RESULT=np.zeros((bins.shape[0],4))
  
 #LOOP TO CHANGE REDSHIFT/WAVELENGTH
 
@@ -67,6 +67,8 @@ for i in range(redshiftbins):
   if zlow >= SED[0][0]:
    for g in range(sedrows):
     if SED[g][0]=zlow:
+     RESULT[i][0]=RESULT[i][0]+trans[g]*
+     
      
      
     
